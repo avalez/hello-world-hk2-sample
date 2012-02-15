@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"> 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>sahoo</groupId>
+    <artifactId>hello</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Hello World HK2 Sample</name>
+    <properties>
+        <hk2.version>1.6.30</hk2.version>
+    </properties>
+    <repositories>
+        <repository>
+            <id>GlassFish</id>
+            <name>GlassFish Maven Repository</name>
+            <url>http://download.java.net/maven/glassfish/</url>
+        </repository>
+        <repository>
+            <id>java.net.m1repo</id>
+            <name>java.net Maven 1 Repository</name>
+            <url>http://download.java.net/maven/1/</url>
+            <layout>legacy</layout>
+        </repository>
+        <repository>
+            <id>java.net.m2repo</id>
+            <name>java.net Maven 2 Repository</name>
+            <url>http://download.java.net/maven/2/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>GlassFish</id>
+            <name>GlassFish Maven Repository</name>
+            <url>http://download.java.net/maven/glassfish/</url>
+        </pluginRepository>
+    </pluginRepositories>
+    <modules>
+        <module>hello-startup</module>
+    </modules>
+</project>
+

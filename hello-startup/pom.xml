@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+      <groupId>sahoo</groupId>
+      <artifactId>hello</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>hello-startup</artifactId>
+  <packaging>hk2-jar</packaging>
+  <version>${pom.parent.version}</version>
+  <name>Startup module for Hello World HK2 Sample</name>
+  <build>
+        <plugins>
+            <plugin>
+                <groupId>org.glassfish.hk2</groupId>
+                <artifactId>hk2-maven-plugin</artifactId>
+                <version>${hk2.version}</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <HK2-Export-Package>
+                                sahoo.hello
+                            </HK2-Export-Package>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>hk2</artifactId>
+            <version>${hk2.version}</version>
+    </dependency>
+  </dependencies>
+</project>
