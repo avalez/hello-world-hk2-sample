@@ -1,2 +1,3 @@
 <domain name="test">
+	<test name="test"/>
 </domain>

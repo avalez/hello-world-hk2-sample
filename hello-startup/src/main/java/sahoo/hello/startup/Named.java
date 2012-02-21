@@ -22,7 +22,6 @@ public interface Named extends ConfigBeanProxy {
     @Attribute(required=true, key=true)
     @NotNull
     public String getName();
-
     public void setName(String value) throws PropertyVetoException;
     
 }

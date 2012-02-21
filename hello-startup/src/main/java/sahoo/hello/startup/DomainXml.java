@@ -2,9 +2,10 @@ package sahoo.hello.startup;
 
 import com.sun.enterprise.module.bootstrap.Populator;
 
+import org.jvnet.hk2.annotations.Inject;
 import org.jvnet.hk2.annotations.Service;
+import org.jvnet.hk2.component.Habitat;
 import org.jvnet.hk2.config.ConfigParser;
-import org.jvnet.hk2.config.DomDocument;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,9 @@ import java.util.zip.ZipFile;
 
 @Service
 public class DomainXml implements Populator {
+    @Inject
+    Habitat habitat;
+    
     public void run(ConfigParser parser) {
         try {
             URL parent = this.getClass().getResource("../../../");
@@ -33,7 +37,7 @@ public class DomainXml implements Populator {
             for (String res: resources) {
                 URL url = new URL("file://" + res);
                 LOGGER.info("Loading " + url);
-                DomDocument document = parser.parse(url);
+                parser.parse(url, new MyDocument(habitat));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,6 +70,7 @@ public class DomainXml implements Populator {
         } catch (final IOException e) {
             throw new Error(e);
         }
+        @SuppressWarnings("rawtypes")
         final Enumeration e = zf.entries();
         while (e.hasMoreElements()) {
             final ZipEntry ze = (ZipEntry) e.nextElement();

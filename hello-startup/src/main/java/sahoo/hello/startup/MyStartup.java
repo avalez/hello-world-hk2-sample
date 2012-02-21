@@ -3,8 +3,6 @@ package sahoo.hello.startup;
 import org.jvnet.hk2.annotations.Inject;
 import org.jvnet.hk2.annotations.Service;
 import org.jvnet.hk2.component.Habitat;
-import org.jvnet.hk2.config.ConfigBeanProxy;
-import org.jvnet.hk2.config.ConfigCode;
 import org.jvnet.hk2.config.ConfigSupport;
 import org.jvnet.hk2.config.SingleConfigCode;
 import org.jvnet.hk2.config.TransactionFailure;
@@ -31,27 +29,30 @@ public class MyStartup implements ModuleStartup
     }
 
     public void start() {
-        Domain other = habitat.getByType(Domain.class); //getComponent(Domain.class, "test");
-        /* NOT WORKING
+        Domain other = habitat.getComponent(Domain.class, "test2");
+        Test test = habitat.getComponent(Test.class, "test2");
         try {
-            ConfigSupport.apply(new SingleConfigCode<Domain>() {
+            // domain can not be modified, see WriteableView.setter(WriteableView.java:235)
+            ConfigSupport.apply(new SingleConfigCode<Test>() {
             //habitat.getComponent(ConfigSupport.class)._apply(new ConfigCode() {
                 @Override
-                public Object run(Domain domain) {
+                public Object run(Test test) {
                 //public Object run(ConfigBeanProxy... configBeanProxies) {
                     //Domain domain = (Domain) configBeanProxies[0];
-                    domain.setName("test1");
-                    return domain;
+                    test.setName("test1");
+                    return test;
                 }
                 
-            }, domain);
+            }, test);
         } catch (TransactionFailure e) {
             e.printStackTrace();
             
         }
-        */
-        System.out.println("Hello " + domain.getName());
-        System.out.println("Hello " + other.getName());
+
+        System.out.println("Domain " + domain.getName());
+        System.out.println("Domain " + other.getName());
+        System.out.println("Domain " + domain.getName() + ", Test " + domain.getTest().getName());
+        System.out.println("Domain " + other.getName() + ", Test " + other.getTest().getName());
         
     }
 
