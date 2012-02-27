@@ -1,6 +1,7 @@
 package sahoo.hello.startup;
 
 import com.sun.enterprise.module.bootstrap.Populator;
+import com.sun.enterprise.module.bootstrap.Which;
 
 import org.jvnet.hk2.annotations.Inject;
 import org.jvnet.hk2.annotations.Service;
@@ -9,6 +10,7 @@ import org.jvnet.hk2.config.ConfigParser;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -27,17 +29,19 @@ public class DomainXml implements Populator {
     
     public void run(ConfigParser parser) {
         try {
-            URL parent = this.getClass().getResource("../../../");
+            URL parent = DomainXml.class.getResource("../../../");
+            if (parent == null) { // inside jar
+                parent = Which.jarFile(DomainXml.class).toURI().toURL();
+            }
             LOGGER.info("Looking for domain*.xml files in " + parent);
-            Collection<String> resources = getResources(parent, Pattern.compile(".*/domain.*xml"));
+            Collection<URL> resources = getResources(parent, Pattern.compile(".*/?domain.*xml"));
             
             if (resources.size() == 0) {
                 LOGGER.severe("No config files to load");
             }
-            for (String res: resources) {
-                URL url = new URL("file://" + res);
-                LOGGER.info("Loading " + url);
-                parser.parse(url, new MyDocument(habitat));
+            for (URL res: resources) {
+                LOGGER.info("Loading " + res);
+                parser.parse(res, new MyDocument(habitat));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,9 +51,9 @@ public class DomainXml implements Populator {
     }
 
     // http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
-    private static Collection<String> getResources(final URL element,
+    private static Collection<URL> getResources(final URL element,
             final Pattern pattern) throws URISyntaxException {
-        final ArrayList<String> retval = new ArrayList<String>();
+        final ArrayList<URL> retval = new ArrayList<URL>();
         final File file = new File(element.toURI());
         if (file.isDirectory()) {
             retval.addAll(getResourcesFromDirectory(file, pattern));
@@ -59,9 +63,9 @@ public class DomainXml implements Populator {
         return retval;
     }
 
-    private static Collection<String> getResourcesFromJarFile(final File file,
+    private static Collection<URL> getResourcesFromJarFile(final File file,
             final Pattern pattern) {
-        final ArrayList<String> retval = new ArrayList<String>();
+        final ArrayList<URL> retval = new ArrayList<URL>();
         ZipFile zf;
         try {
             zf = new ZipFile(file);
@@ -77,7 +81,11 @@ public class DomainXml implements Populator {
             final String fileName = ze.getName();
             final boolean accept = pattern.matcher(fileName).matches();
             if (accept) {
-                retval.add(fileName);
+                try {
+                    retval.add(new URL("jar:" + new File(file.getPath() + "!/" + fileName).toURI().toURL()));
+                } catch (MalformedURLException ex) {
+                    throw new Error(ex);
+                }
             }
         }
         try {
@@ -88,9 +96,9 @@ public class DomainXml implements Populator {
         return retval;
     }
 
-    private static Collection<String> getResourcesFromDirectory(
+    private static Collection<URL> getResourcesFromDirectory(
             final File directory, final Pattern pattern) {
-        final ArrayList<String> retval = new ArrayList<String>();
+        final ArrayList<URL> retval = new ArrayList<URL>();
         final File[] fileList = directory.listFiles();
         for (final File file : fileList) {
             if (file.isDirectory()) {
@@ -100,7 +108,7 @@ public class DomainXml implements Populator {
                     final String fileName = file.getCanonicalPath();
                     final boolean accept = pattern.matcher(fileName).matches();
                     if (accept) {
-                        retval.add(fileName);
+                        retval.add(new URL("file://" + fileName));
                     }
                 } catch (final IOException e) {
                     throw new Error(e);

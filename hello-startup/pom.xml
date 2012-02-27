@@ -23,6 +23,7 @@
                             <HK2-Export-Package>
                                 sahoo.hello
                             </HK2-Export-Package>
+                            <Main-Class>com.sun.enterprise.module.bootstrap.Main</Main-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
