@@ -11,6 +11,7 @@ mkdir lib
 
 # Copy required HK2 jars and their dependencies to lib.
 
+cp $MAVEN_LOCAL_REP/org/glassfish/hk2/hk2/$HK2_VERSION/hk2-$HK2_VERSION.jar lib/hk2.jar
 cp $MAVEN_LOCAL_REP/org/glassfish/hk2/hk2-core/$HK2_VERSION/hk2-core-$HK2_VERSION.jar lib/hk2-core.jar
 cp $MAVEN_LOCAL_REP/org/glassfish/hk2/class-model/$HK2_VERSION/class-model-$HK2_VERSION.jar lib/class-model.jar
 cp $MAVEN_LOCAL_REP/org/glassfish/hk2/config/$HK2_VERSION/config-$HK2_VERSION.jar lib/config.jar
@@ -27,8 +28,8 @@ cp $MAVEN_LOCAL_REP/com/googlecode/jtype/jtype/0.1.0/jtype-0.1.0.jar lib/jtype.j
 cp hello-startup/target/hello-startup-1.0-SNAPSHOT.jar ./lib/
 
 # Uncomment if you want to debug
-DEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000"
+#DEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000"
 
 # Now launch HK2
-$JAVA_HOME/bin/java $DEBUG -jar lib/hello-startup-1.0-SNAPSHOT.jar
+$JAVA_HOME/bin/java $DEBUG -jar lib/hk2.jar
 

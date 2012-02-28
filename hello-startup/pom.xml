@@ -23,8 +23,6 @@
                             <HK2-Export-Package>
                                 sahoo.hello
                             </HK2-Export-Package>
-                            <Main-Class>sahoo.hello.startup.MyMain</Main-Class>
-                            <HK2-Main-Bundle>sahoo.hello-startup</HK2-Main-Bundle>
                         </manifestEntries>
                     </archive>
                 </configuration>
