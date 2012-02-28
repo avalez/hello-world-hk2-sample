@@ -2,6 +2,6 @@ To run, there are a couple of options:
 Option 1:
 mvn -f hello-startup/pom.xml -DmainModule=sahoo.hello-startup hk2:run
 
-Option 2 (NOT WORKING):
+Option 2:
 mvn install
 ./run.sh
