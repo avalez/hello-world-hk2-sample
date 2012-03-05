@@ -13,6 +13,8 @@ import org.jvnet.hk2.config.Transactions;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -25,6 +27,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import javax.xml.stream.XMLInputFactory;
+
 @Service
 public class DomainXml implements Populator {
     @Inject
@@ -33,9 +37,14 @@ public class DomainXml implements Populator {
     @Inject
     DomainListener changesListener;
     
+    ConfigParser configParser;
+    URL parent;
+    
     public void run(ConfigParser parser) {
+        configParser = parser; // save for future
+        
         try {
-            URL parent = DomainXml.class.getResource("../../../");
+            parent = DomainXml.class.getResource("../../../");
             if (parent == null) { // inside jar
                 parent = Which.jarFile(DomainXml.class).toURI().toURL();
             }
@@ -60,6 +69,25 @@ public class DomainXml implements Populator {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
+    }
+    
+    private static final XMLInputFactory xif =  XMLInputFactory.newInstance();
+
+    // assume run() was executed, so that parser and parent are initialized
+    public MyDocument create(String name) {
+        String filePath = parent.toString() + "/domain-" + name + ".xml";
+        MyDocument newDocument = null;
+        Reader reader = new StringReader("<domain name='" + name + "'/>");
+        try {
+            URL fileUrl = new URL(filePath);
+            newDocument = new MyDocument(habitat, fileUrl);
+            new ConfigParser(habitat).parse(xif.createXMLStreamReader(reader), newDocument);
+            // or create file from template first, then  
+            //configParser.parse(fileUrl, newDocument);
+        } catch (Exception e) {
+            e.printStackTrace();            
+        }
+        return newDocument;
     }
 
     // http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory

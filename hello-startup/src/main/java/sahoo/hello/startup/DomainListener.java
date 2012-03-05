@@ -26,7 +26,9 @@ public class DomainListener implements ConfigListener, TransactionListener {
         PropertyChangeEvent event = changes[0];
         ConfigBeanProxy source = (ConfigBeanProxy) event.getSource();
         ConfigBean configBean = (ConfigBean) Dom.unwrap(source);
-        LOGGER.info("Changed : " + configBean.document);
+        LOGGER.info("Changed: " + configBean.document);
+        MyDocument myDocument = (MyDocument) configBean.document;
+        LOGGER.info("Location: " + myDocument.getResource().toString());
         
         return null;
     }
@@ -39,6 +41,8 @@ public class DomainListener implements ConfigListener, TransactionListener {
         ConfigBeanProxy source = (ConfigBeanProxy) event.getSource();
         ConfigBean configBean = (ConfigBean) Dom.unwrap(source);
         LOGGER.info("Transcation Committed for document: " + configBean.document);
+        MyDocument myDocument = (MyDocument) configBean.document;
+        LOGGER.info("Location: " + myDocument.getResource().toString());
     }
 
     @Override

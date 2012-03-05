@@ -3,6 +3,7 @@ package sahoo.hello.startup;
 import org.jvnet.hk2.annotations.Inject;
 import org.jvnet.hk2.annotations.Service;
 import org.jvnet.hk2.component.Habitat;
+import org.jvnet.hk2.config.ConfigBean;
 import org.jvnet.hk2.config.ConfigSupport;
 import org.jvnet.hk2.config.SingleConfigCode;
 import org.jvnet.hk2.config.TransactionFailure;
@@ -25,6 +26,9 @@ public class MyStartup implements ModuleStartup
     @Inject
     protected Habitat habitat;
     
+    @Inject
+    DomainXml domainXml;
+    
     public void setStartupContext(StartupContext context) {
     }
 
@@ -45,17 +49,36 @@ public class MyStartup implements ModuleStartup
                 
             }, test);
         } catch (TransactionFailure e) {
-            e.printStackTrace();
-            
+            e.printStackTrace();            
         }
 
-        System.out.println("Domain " + domain.getName());
-        System.out.println("Domain " + other.getName());
         System.out.println("Domain " + domain.getName() + ", Test " + domain.getTest().getName());
         System.out.println("Domain " + other.getName() + ", Test " + other.getTest().getName());
         
+        MyDocument newDocument = domainXml.create("new-test");
+        ConfigBean root = (ConfigBean) newDocument.getRoot();
+        Domain newDomain = root.getProxy(Domain.class);
+        
+        try {
+            ConfigSupport.apply(new SingleConfigCode<Domain>() {
+                @Override
+                public Object run(Domain domain) throws TransactionFailure {
+                    Test test = domain.createChild(Test.class);
+                    test.setName("test3");
+                    domain.setTest(test);
+                    return domain;
+                }
+                
+            }, newDomain);
+        } catch (TransactionFailure e) {
+            e.printStackTrace();            
+        }
+        
+        System.out.println("New Domain " + newDomain.getName() + ", Test " + newDomain.getTest().getName());
+
     }
 
+    
     public void stop() {}
 
 }
