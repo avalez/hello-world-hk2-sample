@@ -38,7 +38,7 @@ public class MyStartup implements ModuleStartup
                 @Override
                 public Object run(Test test) {
                 //public Object run(ConfigBeanProxy... configBeanProxies) {
-                    //Domain domain = (Domain) configBeanProxies[0];
+                    //Test test = (Test) configBeanProxies[0];
                     test.setName("test1");
                     return test;
                 }

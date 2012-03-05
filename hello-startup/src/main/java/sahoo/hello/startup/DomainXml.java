@@ -6,7 +6,10 @@ import com.sun.enterprise.module.bootstrap.Which;
 import org.jvnet.hk2.annotations.Inject;
 import org.jvnet.hk2.annotations.Service;
 import org.jvnet.hk2.component.Habitat;
+import org.jvnet.hk2.config.ConfigBean;
 import org.jvnet.hk2.config.ConfigParser;
+import org.jvnet.hk2.config.DomDocument;
+import org.jvnet.hk2.config.Transactions;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +30,9 @@ public class DomainXml implements Populator {
     @Inject
     Habitat habitat;
     
+    @Inject
+    DomainListener changesListener;
+    
     public void run(ConfigParser parser) {
         try {
             URL parent = DomainXml.class.getResource("../../../");
@@ -41,8 +47,14 @@ public class DomainXml implements Populator {
             }
             for (URL res: resources) {
                 LOGGER.info("Loading " + res);
-                parser.parse(res, new MyDocument(habitat));
+                @SuppressWarnings("rawtypes")
+                DomDocument doc = parser.parse(res, new MyDocument(habitat, res));
+                // register changes listener
+                ((ConfigBean)doc.getRoot()).addListener(changesListener);
+               
             }
+            // alternative change listener:
+            habitat.getComponent(Transactions.class).addTransactionsListener(changesListener);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (URISyntaxException e) {
