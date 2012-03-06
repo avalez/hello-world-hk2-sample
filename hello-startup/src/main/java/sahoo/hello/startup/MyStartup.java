@@ -38,16 +38,18 @@ public class MyStartup implements ModuleStartup
         try {
             // domain can not be modified, see WriteableView.setter(WriteableView.java:235)
             ConfigSupport.apply(new SingleConfigCode<Test>() {
-            //habitat.getComponent(ConfigSupport.class)._apply(new ConfigCode() {
+            //ConfigSupport.apply(new ConfigCode() {
                 @Override
                 public Object run(Test test) {
                 //public Object run(ConfigBeanProxy... configBeanProxies) {
                     //Test test = (Test) configBeanProxies[0];
                     test.setName("test1");
+                    //test = (Test) configBeanProxies[1];
+                    //test.setName("test1");
                     return test;
                 }
                 
-            }, test);
+            }, test/*, habitat.getComponent(Test.class, "test")*/);
         } catch (TransactionFailure e) {
             e.printStackTrace();            
         }

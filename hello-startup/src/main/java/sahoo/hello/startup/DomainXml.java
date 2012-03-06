@@ -84,6 +84,8 @@ public class DomainXml implements Populator {
             new ConfigParser(habitat).parse(xif.createXMLStreamReader(reader), newDocument);
             // or create file from template first, then  
             //configParser.parse(fileUrl, newDocument);
+            // TODO: remove if not used
+            ((ConfigBean)newDocument.getRoot()).addListener(changesListener);
         } catch (Exception e) {
             e.printStackTrace();            
         }
