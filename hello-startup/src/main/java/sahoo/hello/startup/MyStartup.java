@@ -29,8 +29,8 @@ public class MyStartup implements ModuleStartup
     @Inject
     DomainXml domainXml;
     
-    @Inject
-    ScopedDomain scopedDomain;
+    //@Inject
+    //ScopedDomain scopedDomain;
 
     public void setStartupContext(StartupContext context) {
     }
@@ -82,11 +82,24 @@ public class MyStartup implements ModuleStartup
         System.out.println("New Domain " + newDomain.getName() + ", Test " + newDomain.getTest().getName());
         
         // caution, here name is file name suffix
-        Domain scoped = scopedDomain.getDomain("1");
-        System.out.println("Scoped Domain " + scoped.getName() + ", Test " + scoped.getTest().getName());
+        ScopedDomain.name.set("1");
+        ScopedDomain scopedDomain = habitat.getComponent(ScopedDomain.class);
+        
+        Domain scoped = scopedDomain.getDomain();
+        System.out.println("Scoped Domain " + (scoped != null ? scoped.getName() : null) + ", Test " + (scoped != null ? scoped.getTest().getName() : null));
 
         System.out.println("Domain1: " + domain);
         System.out.println("Domain2: " + scoped);
+        
+        // caution, here name is file name suffix
+        ScopedDomain.name.set("2");
+        scopedDomain = habitat.getComponent(ScopedDomain.class, "Hk2ScopedDomain");
+        scoped = scopedDomain.getDomain();
+        System.out.println("HK2 Scoped Domain " + (scoped != null ? scoped.getName() : null) + ", Test " + (scoped != null ? scoped.getTest().getName() : null));
+        System.out.println("Domain1: " + domain);
+        System.out.println("Domain2: " + scoped);
+        
+        
     }
 
     
