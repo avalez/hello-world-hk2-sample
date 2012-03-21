@@ -58,7 +58,10 @@ public class MyScopedDomain implements ScopedDomain {
 
     private Habitat getNewHabitat(String name) {
         Properties p = new Properties();
-        ModulesRegistry registry = new StaticModulesRegistry(MyScopedDomain.class.getClassLoader(), new StartupContext(p));
+        ModulesRegistry registry = new StaticModulesRegistry(
+                new MaskingClassLoader(MyScopedDomain.class.getClassLoader(),
+                        "org.jvnet.hk2", "com.sun.enterprise", "sahoo.hello.startup.Domain", "sahoo.hello.startup.Test"), new StartupContext(p));
+
         final Habitat habitat = registry.createHabitat("default");
         
         populate(habitat, name);
