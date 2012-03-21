@@ -62,5 +62,5 @@ public class DomainFactory implements Factory<Domain> {
         parser.parse(fileUrl, new MyDocument(habitat, fileUrl));
     }
 
-    private static final Logger LOGGER = Logger.getLogger(NewScopedDomain.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(DomainFactory.class.getName());
 }
