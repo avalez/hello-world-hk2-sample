@@ -37,7 +37,7 @@ public class MyStartup implements ModuleStartup
     
     public void start() {
         System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
-        Domain other = habitat.getComponent(Domain.class, "test2");
+        Domain other = habitat.getComponent(Domain.class);
         ScopedDomain.name.set("2");
         System.out.println("Other " + (other != null ? other.getName() + ", Test " + other.getTest().getName() : "null"));
         Test test = other.getTest();
@@ -61,6 +61,7 @@ public class MyStartup implements ModuleStartup
         }
 
         System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
+        ScopedDomain.name.set("1");
         System.out.println("Other " + (other != null ? other.getName() + ", Test " + other.getTest().getName() : "null"));
         
         MyDocument newDocument = domainXml.create("new-test");
