@@ -9,7 +9,7 @@ public interface ScopedDomain {
     ThreadLocal <String> name = new ThreadLocal<String>() {
         @Override
         protected String initialValue() {
-            return null;
+            return "1";
         }
     };
 }

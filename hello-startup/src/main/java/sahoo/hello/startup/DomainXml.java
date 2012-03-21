@@ -29,7 +29,7 @@ import java.util.zip.ZipFile;
 
 import javax.xml.stream.XMLInputFactory;
 
-@Service
+//@Service
 public class DomainXml implements Populator {
     @Inject
     Habitat habitat;
