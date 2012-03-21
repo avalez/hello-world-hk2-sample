@@ -38,7 +38,7 @@ public class MyStartup implements ModuleStartup
     public void start() {
         System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
         Domain other = habitat.getComponent(Domain.class, "test2");
-        System.out.println("Other " + (other != null ? other.getName() + other.getTest().getName() : "null"));
+        System.out.println("Other " + (other != null ? other.getName() + ", Test " + other.getTest().getName() : "null"));
         Test test = habitat.getComponent(Test.class, "test2");
         try {
             // domain can not be modified, see WriteableView.setter(WriteableView.java:235)
@@ -60,7 +60,7 @@ public class MyStartup implements ModuleStartup
         }
 
         System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
-        System.out.println("Other " + (other != null ? other.getName() + other.getTest().getName() : "null"));
+        System.out.println("Other " + (other != null ? other.getName() + ", Test " + other.getTest().getName() : "null"));
         
         MyDocument newDocument = domainXml.create("new-test");
         ConfigBean root = (ConfigBean) newDocument.getRoot();
