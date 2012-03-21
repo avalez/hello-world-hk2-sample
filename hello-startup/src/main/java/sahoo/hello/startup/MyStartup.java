@@ -36,7 +36,9 @@ public class MyStartup implements ModuleStartup
     }
     
     public void start() {
+        System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
         Domain other = habitat.getComponent(Domain.class, "test2");
+        System.out.println("Other " + (other != null ? other.getName() + other.getTest().getName() : "null"));
         Test test = habitat.getComponent(Test.class, "test2");
         try {
             // domain can not be modified, see WriteableView.setter(WriteableView.java:235)
@@ -57,8 +59,8 @@ public class MyStartup implements ModuleStartup
             e.printStackTrace();            
         }
 
-        System.out.println("Domain " + domain.getName() + ", Test " + domain.getTest().getName());
-        System.out.println("Domain " + other.getName() + ", Test " + other.getTest().getName());
+        System.out.println("Domain " + (domain != null ? domain.getName() + ", Test " + domain.getTest().getName() : "null"));
+        System.out.println("Other " + (other != null ? other.getName() + other.getTest().getName() : "null"));
         
         MyDocument newDocument = domainXml.create("new-test");
         ConfigBean root = (ConfigBean) newDocument.getRoot();
@@ -86,7 +88,7 @@ public class MyStartup implements ModuleStartup
         ScopedDomain scopedDomain = habitat.getComponent(ScopedDomain.class);
         
         Domain scoped = scopedDomain.getDomain();
-        System.out.println("Scoped Domain " + (scoped != null ? scoped.getName() : null) + ", Test " + (scoped != null ? scoped.getTest().getName() : null));
+        System.out.println("Scoped Domain " + (scoped != null ? scoped.getName()  + ", Test " +  scoped.getTest().getName() : null));
 
         System.out.println("Domain1: " + domain);
         System.out.println("Domain2: " + scoped);

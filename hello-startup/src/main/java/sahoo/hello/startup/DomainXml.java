@@ -38,16 +38,25 @@ public class DomainXml implements Populator {
     DomainListener changesListener;
     
     ConfigParser configParser;
+
     URL parent;
     
-    public void run(ConfigParser parser) {
-        configParser = parser; // save for future
-        
+    public DomainXml() {
         try {
             parent = DomainXml.class.getResource("../../../");
             if (parent == null) { // inside jar
                 parent = Which.jarFile(DomainXml.class).toURI().toURL();
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public void run(ConfigParser parser) {
+        configParser = parser; // save for future
+        
+        try {
             LOGGER.info("Looking for domain*.xml files in " + parent);
             Collection<URL> resources = getResources(parent, Pattern.compile(".*/?domain.*xml"));
             
@@ -64,8 +73,6 @@ public class DomainXml implements Populator {
             }
             // alternative change listener:
             habitat.getComponent(Transactions.class).addTransactionsListener(changesListener);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
